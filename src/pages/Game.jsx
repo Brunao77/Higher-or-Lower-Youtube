@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getRandomItems } from "../helpers/getRandomItems";
+import { Redirect } from 'react-router-dom';
 
 const get2RandomItems = getRandomItems(2);
 
@@ -53,29 +54,34 @@ function Game(props) {
   if(!lastVideo.snippet.thumbnails.maxres.url) return <div>Loading...</div>
 
   return (
-    <div className="container-all-option">
-      <div className="container-first-option" style={{ 
-      backgroundImage: `url(${firstVideo.snippet.thumbnails.maxres.url})` 
-      }}>
-        <div className="container-text-first-option">
-          <p className="title-first-option">"{firstVideo.snippet.title}"</p>
-          <button onClick={()=>checkStatus(true)} className="higher-button">Higher</button>
-          <button onClick={()=>checkStatus(false)} className="lower-button">Lower</button>
-          <p className="complement-text">viewers than {lastVideo.snippet.channelTitle}</p>
+    <React.Fragment>
+      <div className="container-all-option">
+        <div className="container-first-option" style={{ 
+          backgroundImage: `url(${firstVideo.snippet.thumbnails.maxres.url})` 
+        }}>
+          <div className="container-text-first-option">
+            <p className="title-first-option">"{firstVideo.snippet.title}"</p>
+            <button onClick={()=>checkStatus(true)} className="higher-button">Higher</button>
+            <button onClick={()=>checkStatus(false)} className="lower-button">Lower</button>
+            <p className="complement-text">viewers than {lastVideo.snippet.channelTitle}</p>
+          </div>
         </div>
-      </div>
-      <div className="container-second-option"  style={{ 
-      backgroundImage: `url(${lastVideo.snippet.thumbnails.maxres.url})` 
-      }}>
-        <div className="container-text-second-option">
-          <p className="title-second-option">"{lastVideo.snippet.title}"</p>
-          <p className="complement-text">has</p>
-          <p className="views-second-option">{lastVideo.statistics.viewCount}</p>
-          <p className="complement-text">views</p>
+        <div className="container-second-option"  style={{ 
+          backgroundImage: `url(${lastVideo.snippet.thumbnails.maxres.url})` 
+        }}>
+          <div className="container-text-second-option">
+            <p className="title-second-option">"{lastVideo.snippet.title}"</p>
+            <p className="complement-text">has</p>
+            <p className="views-second-option">{new Intl.NumberFormat("en-US").format(lastVideo.statistics.viewCount)}</p>
+            <p className="complement-text">views</p>
+          </div>
         </div>
+        {
+          lose && <Redirect to="/lose" />
+        }
       </div>
-      
-    </div>
+      <p className="score">{played.length-2}</p>
+    </React.Fragment>
   )
 }
   

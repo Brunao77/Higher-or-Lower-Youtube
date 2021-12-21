@@ -1,11 +1,13 @@
-import { Link } from "react-router-dom";
-
 function Initial() {
 
   return (
-    <button>
-      <Link to="/play">jugar</Link>
-    </button>
+    <div className="container-welcome">
+      <button className="play-btn" onClick={() => { window.location.href='/play'
+      }}>
+        <p>PLAY</p>
+      </button>
+    </div>
   )
+
 }
 export default Initial
