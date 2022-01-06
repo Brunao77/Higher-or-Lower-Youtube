@@ -4,7 +4,6 @@ import Game from "./pages/Game";
 import Initial from "./pages/Initial";
 import Lose from "./pages/Lose"
 import { useVideos } from './hooks/useVideos'
-import "./styles/game.css"
 
 function App() {
 
