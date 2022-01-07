@@ -1,10 +1,13 @@
 {
   "name": "higher-or-lower-youtube",
   "version": "0.0.0",
+  "homepage": "https://brunao77.github.io/Higher-or-Lower-Youtube",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "predeploy":"npm run build",
+    "deploy":"gh-pages -d build"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.7.3",
@@ -12,6 +15,7 @@
     "@emotion/styled": "^11.6.0",
     "dotenv": "^10.0.0",
     "framer-motion": "^5.5.5",
+    "gh-pages": "^3.2.3",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-router-dom": "^5.3.0"

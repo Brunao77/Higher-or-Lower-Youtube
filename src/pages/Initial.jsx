@@ -25,7 +25,7 @@ function Initial({setPages}) {
             cursor: "pointer"
           }}
           _active={{ transform: "scale(97%)" }}
-          onClick={() => { setPages(1)/*window.location.href = '/play'*/ }}>
+          onClick={() => { setPages(1) }}>
           PLAY
         </Button>
       </Stack>

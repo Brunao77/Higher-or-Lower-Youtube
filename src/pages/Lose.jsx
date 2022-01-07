@@ -36,7 +36,7 @@ function Lose({ score, bestScore, setBestScore, setPages }) {
               cursor: "pointer"
             }}
             _active={{ transform: "scale(97%)" }}
-            onClick={() => { setPages(1)/*window.location.href = '/play'*/ }}>
+            onClick={() => { setPages(1) }}>
             PLAY AGAIN
           </Button>
           <Button
@@ -57,7 +57,7 @@ function Lose({ score, bestScore, setBestScore, setPages }) {
               cursor: "pointer"
             }}
             _active={{ transform: "scale(97%)" }}
-            onClick={() => { setPages(0) /*window.location.href = '/' */}}>
+            onClick={() => { setPages(0)}}>
             RETURN
           </Button>
         </Stack>
