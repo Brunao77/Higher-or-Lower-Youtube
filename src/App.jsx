@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Game from "./pages/Game";
 import Initial from "./pages/Initial";
 import Lose from "./pages/Lose"
@@ -9,6 +8,7 @@ function App() {
 
   const [score, setScore] = useState(0)
   const [bestScore,setBestScore] = useState(0)
+  const [pages,setPages] = useState(0)
 
   useEffect(() => {
     const storedScore = JSON.parse(localStorage.getItem("score"));
@@ -21,14 +21,10 @@ function App() {
   if(!videos) return null;
 
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/"> <Initial bestScore={bestScore} /> </Route>
-        <Route exact path="/play" > <Game videos={videos} score={score} setScore={setScore} bestScore={bestScore} /></Route>
-        <Route exact path="/lose" > <Lose score={score} bestScore={bestScore} setBestScore={setBestScore} /> </Route>
-        <Redirect to="/" />
-      </Switch>
-    </BrowserRouter>
+    pages===0 ?
+      <Initial setPages={setPages} /> :
+      pages===1 ? <Game videos={videos} score={score} setScore={setScore} bestScore={bestScore} setPages={setPages} /> :
+      <Lose score={score} bestScore={bestScore} setBestScore={setBestScore} setPages={setPages} />
   )
 }
 

@@ -1,19 +1,21 @@
-import { Button, Stack, Text } from "@chakra-ui/react"
+import { Button, Stack, Image, Text } from "@chakra-ui/react"
+import logoWhite from "../assets/logoWhite.png"
 
-function Initial({bestScore}) {
+function Initial({setPages}) {
 
   return (
     <>
       <Stack alignItems="center" justifyContent="center" height="100%">
+        <Image src={logoWhite} position="absolute" top="10%" width="500px" height="300px" />
         <Button
           variant="unstyled"
-          width="6vw"
-          height="3vw"
+          width="max(6vw,60px)"
+          height="max(3vw,40px)"
           lineHeight={0}
           bg="rgba(133, 133, 133, 0)"
           color="rgb(252, 255, 95)"
           border="2px solid #ffff"
-          fontSize="1vw"
+          fontSize="max(1vw,20px)"
           fontWeight="600"
           transition=".2s"
           textAlign="center"
@@ -23,18 +25,11 @@ function Initial({bestScore}) {
             cursor: "pointer"
           }}
           _active={{ transform: "scale(97%)" }}
-          onClick={() => { window.location.href = '/play' }}>
+          onClick={() => { setPages(1)/*window.location.href = '/play'*/ }}>
           PLAY
         </Button>
       </Stack>
     </>
-
-    /*<div className="container-welcome">
-      <button className="play-btn" onClick={() => { window.location.href='/play'
-      }}>
-        <p>PLAY</p>
-      </button>
-    </div>*/
   )
 
 }

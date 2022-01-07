@@ -1,8 +1,8 @@
-import { Button, Stack, Text } from "@chakra-ui/react"
-import React,{useEffect} from "react"
+import { Button, Stack, Text, Image } from "@chakra-ui/react"
+import React, {useEffect} from "react"
+import logoWhite from "../assets/logoWhite.png"
 
-function Lose({ score, bestScore, setBestScore }) {
-
+function Lose({ score, bestScore, setBestScore, setPages }) {
 
   if (score > bestScore) {
     setBestScore(score)
@@ -14,6 +14,7 @@ function Lose({ score, bestScore, setBestScore }) {
   return (
     <>
       <Stack height="100%" alignItems="center" justifyContent="center">
+      <Image src={logoWhite} position="absolute" top="15%" width="400px" height="200px" />
         <Text fontSize="2vw" lineHeight="0">You scored:</Text>
         <Text fontSize="4vw" fontWeight="800" color="rgb(252, 255, 95)">{score}</Text>
         <Stack direction="row" spacing="2vw">
@@ -35,7 +36,7 @@ function Lose({ score, bestScore, setBestScore }) {
               cursor: "pointer"
             }}
             _active={{ transform: "scale(97%)" }}
-            onClick={() => { window.location.href = '/play' }}>
+            onClick={() => { setPages(1)/*window.location.href = '/play'*/ }}>
             PLAY AGAIN
           </Button>
           <Button
@@ -56,7 +57,7 @@ function Lose({ score, bestScore, setBestScore }) {
               cursor: "pointer"
             }}
             _active={{ transform: "scale(97%)" }}
-            onClick={() => { window.location.href = '/' }}>
+            onClick={() => { setPages(0) /*window.location.href = '/' */}}>
             RETURN
           </Button>
         </Stack>

@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { getRandomItems } from "../helpers/getRandomItems";
-import { Redirect } from 'react-router-dom';
-import { Stack, Text, Image, Button } from "@chakra-ui/react";
+import { Stack, Text } from "@chakra-ui/react";
+import { motion } from 'framer-motion'
+import TwoOptions from "../components/TwoOptions";
+
+const MotionStack = motion(Stack)
 
 const get2RandomItems = getRandomItems(2);
 const get1RandomItem = getRandomItems(1);
 
-function Game({ score, videos, setScore, bestScore }) {
+function Game({ score, videos, setScore, bestScore, setPages }) {
 
   const [played, setPlayed] = useState(null)
   const [lose, setLose] = useState(false)
+  const [win, setWin] = useState(false)
 
   useEffect(() => {
     setPlayed(get2RandomItems(videos))
@@ -43,8 +47,15 @@ function Game({ score, videos, setScore, bestScore }) {
 
   setScore(played.length - 2)
 
+  function redirectAfterAnimation() {
+
+    setTimeout(function () {
+      setPages(2)
+    }, 2000);
+  }
+
   return (
-    <>
+    !(lose || played.length === 50) ?
       <Stack
         width="100%"
         height="100%"
@@ -58,74 +69,59 @@ function Game({ score, videos, setScore, bestScore }) {
           right: "0",
           backgroundColor: "rgba(0, 0, 0, 0.671)"
         }}>
-        <Stack direction={{ base: 'column', sm: 'column', md: 'row', lg: 'row' }} spacing={0} height="100%">
-          <Stack
-            bgImage={firstVideo.snippet.thumbnails.high.url}
-            bgRepeat="no-repeat"
-            bgSize={{ base: 'column', sm: 'cover', md: 'contain', lg: 'contain' }}
-            bgPosition="center"
-            width="100%"
-            alignItems="center"
-            justifyContent="center"
-            height="100%"
-          >
-            <Stack position="relative" textAlign="center" alignItems="center">
-              <Text size="md">{firstVideo.snippet.title}</Text>
-              <Button
-                width="max(6vw,60px)"
-                height="max(3vw,40px)"
-                fontSize="max(1vw,10px)"
-                bg="rgba(133, 133, 133, 0)"
-                onKeyPress={(e) =>
-                  ["Enter", "Space"].includes(e.code) && checkStatus(true)
-                }
-                onClick={() => checkStatus(true)}>Higher</Button>
-              <Button
-                width="max(6vw,60px)"
-                height="max(3vw,40px)"
-                fontSize="max(1vw,10px)"
-                bg="rgba(133, 133, 133, 0)"
-                onKeyPress={(e) =>
-                  ["Enter", "Space"].includes(e.code) && checkStatus(false)
-                }
-                onClick={() => checkStatus(false)}>Lower</Button>
-              <Text size="sm">viewers than {lastVideo.snippet.channelTitle}</Text>
-            </Stack>
-          </Stack>
-          <Stack
-            bgImage={lastVideo.snippet.thumbnails.high.url}
-            bgRepeat="no-repeat"
-            bgSize={{ sm: 'cover', md: 'contain', lg: 'contain' }}
-            bgPosition="center"
-            width="100%"
-            alignItems="center"
-            justifyContent="center"
-            height="100%"
-          >
-            <Stack position="relative" textAlign="center" alignItems="center">
-              <Text size="md">{lastVideo.snippet.title}</Text>
-              <Text size="sm">has</Text>
-              <Text size="lg" color="rgb(252, 255, 95)">{new Intl.NumberFormat("en-US").format(lastVideo.statistics.viewCount)}</Text>
-              <Text size="sm">views</Text>
-            </Stack>
-          </Stack>
-        </Stack>
+        <TwoOptions firstVideo={firstVideo} lastVideo={lastVideo} checkStatus={checkStatus} score={score} bestScore={bestScore} buttonDisabled={false} />
         <Stack
-          position={{ base: 'absolute', sm: 'absolute', md: 'relative', lg: 'relative' }}
-          top={{ base: '50%', sm: '50%', md: '0', lg: '0' }} left={{ base: '50%', sm: '50%', md: '50%', lg: '50%' }}
-          transform="translate(-50%,-50%)"
+          userSelect="none"
+          bg="white"
+          borderRadius="999px"
+          position="absolute"
+          top="40%"
+          alignSelf="center"
+          width="max(4vw,40px)"
+          height="max(4vw,40px)"
           justifyContent="center"
-          alignItems="center"
-          textAlign="center"
-          spacing={0}>
-          <Text size="lg" position="relative" color="white">{score}</Text>
-          <Text size="sm" color="white">High Score: {bestScore}</Text>
+          alignItems="center">
+          <Text color="black">VS</Text>
         </Stack>
+      </Stack> 
+      
+      :
+
+      <Stack
+        width="100%"
+        height="100%"
+        bg="rgba(0, 0, 0, 0.671)"
+        _before={{
+          content: "''",
+          position: "absolute",
+          top: "0",
+          bottom: "0",
+          left: "0",
+          right: "0",
+          backgroundColor: "rgba(0, 0, 0, 0.671)"
+        }}>
+        <TwoOptions firstVideo={firstVideo} lastVideo={lastVideo} checkStatus={checkStatus} score={score} bestScore={bestScore} buttonDisabled={true} />
+        <MotionStack
+          initial={{ scale: 0 }}
+          animate={{ backgroundColor: ["#FFFFFF", "#FFB3B3", '#FF6A6A'], scale: 1 }}
+          transition={{
+            duration: 1,
+          }}
+          userSelect="none"
+          borderRadius="999px"
+          position="absolute"
+          top="40%"
+          alignSelf="center"
+          width="max(4vw,40px)"
+          height="max(4vw,40px)"
+          justifyContent="center"
+          alignItems="center">
+          <Text color="white">X</Text>
+        </MotionStack>
         {
-          (lose || played.length === 50) && <Redirect to="/lose" />
+          redirectAfterAnimation()
         }
       </Stack>
-    </>
   )
 }
 
