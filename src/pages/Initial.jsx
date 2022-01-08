@@ -6,7 +6,7 @@ function Initial({setPages}) {
   return (
     <>
       <Stack alignItems="center" justifyContent="center" height="100%">
-        <Image src={logoWhite} position="absolute" top="10%" width="500px" height="300px" />
+        <Image src={logoWhite} position="absolute" top="5vw" width="max(30vw,300px)" height="max(15vw,200px)" />
         <Button
           variant="unstyled"
           width="max(6vw,60px)"

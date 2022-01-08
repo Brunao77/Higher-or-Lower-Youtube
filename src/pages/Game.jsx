@@ -24,8 +24,7 @@ function Game({ score, videos, setScore, bestScore, setPages }) {
     do {
       video = get1RandomItem(videos)
     } while (played.includes(video[0]) && played.length < 50);
-
-
+    
     if (played.length < videos.length)
       setPlayed(() => [video[0], ...played])
 

@@ -14,19 +14,19 @@ function Lose({ score, bestScore, setBestScore, setPages }) {
   return (
     <>
       <Stack height="100%" alignItems="center" justifyContent="center">
-      <Image src={logoWhite} position="absolute" top="15%" width="400px" height="200px" />
-        <Text fontSize="2vw" lineHeight="0">You scored:</Text>
-        <Text fontSize="4vw" fontWeight="800" color="rgb(252, 255, 95)">{score}</Text>
+      <Image src={logoWhite} position="absolute" top="5vw" width="max(25vw,300px)" height="max(10vw,200px)" />
+        <Text fontSize="max(2vw,10px)" lineHeight="0">You scored:</Text>
+        <Text fontSize="max(4vw,30px)" fontWeight="800" color="rgb(252, 255, 95)">{score}</Text>
         <Stack direction="row" spacing="2vw">
           <Button
             variant="unstyled"
-            width="7vw"
-            height="3vw"
+            width="max(7vw,80px)"
+            height="max(3vw,40px)"
             lineHeight={0}
             bg="rgba(133, 133, 133, 0)"
             color="rgb(252, 255, 95)"
             border="2px solid #ffff"
-            fontSize="1vw"
+            fontSize="max(1vw,10px)"
             fontWeight="600"
             transition=".2s"
             textAlign="center"
@@ -41,13 +41,13 @@ function Lose({ score, bestScore, setBestScore, setPages }) {
           </Button>
           <Button
             variant="unstyled"
-            width="7vw"
-            height="3vw"
+            width="max(7vw,80px)"
+            height="max(3vw,40px)"
             lineHeight={0}
             bg="rgba(133, 133, 133, 0)"
             color="rgb(252, 255, 95)"
             border="2px solid #ffff"
-            fontSize="1vw"
+            fontSize="max(1vw,10px)"
             fontWeight="600"
             transition=".2s"
             textAlign="center"
