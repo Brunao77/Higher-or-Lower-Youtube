@@ -1,6 +1,9 @@
 import { Button, Stack, Text } from "@chakra-ui/react"
+import { motion } from 'framer-motion'
 
-function TwoOptions({ firstVideo, checkStatus, lastVideo, score, bestScore, buttonDisabled }) {
+const MotionText = motion(Text)
+
+function TwoOptions({ firstVideo, checkStatus, lastVideo, score, bestScore, buttonDisabled, animateScore }) {
 
     return (
         <>
@@ -61,7 +64,13 @@ function TwoOptions({ firstVideo, checkStatus, lastVideo, score, bestScore, butt
                 alignItems="center"
                 textAlign="center"
                 spacing={0}>
-                <Text size="lg" position="relative" color="white">{score}</Text>
+                <MotionText
+                initial={animateScore && { scale: 0 }}
+                animate={animateScore && { scale: 1 }}
+                transition={{
+                  duration: 0.2,
+                }}
+                size="lg" position="relative" color="white">{score}</MotionText>
                 <Text size="sm" color="white">High Score: {bestScore}</Text>
             </Stack>
         </>

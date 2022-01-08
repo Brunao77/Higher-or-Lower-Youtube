@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { getRandomItems } from "../helpers/getRandomItems";
-import { Stack, Text } from "@chakra-ui/react";
+import { Icon, Stack, Text } from "@chakra-ui/react";
 import { motion } from 'framer-motion'
 import TwoOptions from "../components/TwoOptions";
+import { BsCheckLg } from "react-icons/bs"
 
 const MotionStack = motion(Stack)
+const MotionText = motion(Text)
 
 const get2RandomItems = getRandomItems(2);
 const get1RandomItem = getRandomItems(1);
 
 function Game({ score, videos, setScore, bestScore, setPages }) {
-
   const [played, setPlayed] = useState(null)
   const [lose, setLose] = useState(false)
-  const [playAnimation, setplayAnimation] = useState(false)
+  const [playFirstAnimation, setPlayFirstAnimation] = useState(false)
+  const [playWinAnimation, setPlayWinAnimation] = useState(false)
+  const [isInitial, setIsInitial] = useState(true)
 
   useEffect(() => {
     setPlayed(get2RandomItems(videos))
@@ -24,20 +27,38 @@ function Game({ score, videos, setScore, bestScore, setPages }) {
     do {
       video = get1RandomItem(videos)
     } while (played.includes(video[0]) && played.length < 50);
-    
+
     if (played.length < videos.length)
       setPlayed(() => [video[0], ...played])
-
   }
 
   const checkStatus = (high) => {
-    high ?
-      parseInt(firstVideo.statistics.viewCount) >= parseInt(lastVideo.statistics.viewCount) ?
-        selectRandomVideo()
-        : setLose(true)
-      : parseInt(firstVideo.statistics.viewCount) <= parseInt(lastVideo.statistics.viewCount) ?
-        selectRandomVideo()
-        : setLose(true)
+    if (high) {
+      if (parseInt(firstVideo.statistics.viewCount) >= parseInt(lastVideo.statistics.viewCount)) {
+        setPlayWinAnimation(true)
+        setIsInitial(false)
+        setTimeout(function () {
+          selectRandomVideo()
+          setPlayWinAnimation(false)
+        }, 1000);
+      }
+      else {
+        setLose(true)
+      }
+    }
+    else {
+      if (parseInt(firstVideo.statistics.viewCount) <= parseInt(lastVideo.statistics.viewCount)) {
+        setPlayWinAnimation(true)
+        setIsInitial(false)
+        setTimeout(function () {
+          selectRandomVideo()
+          setPlayWinAnimation(false)
+        }, 1000);
+      }
+      else {
+        setLose(true)
+      }
+    }
   }
 
   if (!played) return <div>Loading...</div>
@@ -48,18 +69,18 @@ function Game({ score, videos, setScore, bestScore, setPages }) {
 
   function redirectAfterAnimation() {
     setTimeout(function () {
-      setplayAnimation(true)
-    }, 1000);
+      setPlayFirstAnimation(true)
+    }, 800);
     setTimeout(function () {
       setPages(2)
-    }, 2000);
+    }, 1300);
   }
 
   return (
-    !(lose || played.length === 50) ?
+    (!(lose || played.length === 50) && !playWinAnimation) ?
       <MotionStack
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
+        initial={isInitial && { scale: 0 }}
+        animate={isInitial && { scale: 1 }}
         transition={{
           duration: 0.5,
         }}
@@ -75,7 +96,7 @@ function Game({ score, videos, setScore, bestScore, setPages }) {
           right: "0",
           backgroundColor: "rgba(0, 0, 0, 0.671)"
         }}>
-        <TwoOptions firstVideo={firstVideo} lastVideo={lastVideo} checkStatus={checkStatus} score={score} bestScore={bestScore} buttonDisabled={false} />
+        <TwoOptions firstVideo={firstVideo} lastVideo={lastVideo} checkStatus={checkStatus} score={score} bestScore={bestScore} buttonDisabled={false} animateScore={true} />
         <Stack
           userSelect="none"
           bg="white"
@@ -89,50 +110,90 @@ function Game({ score, videos, setScore, bestScore, setPages }) {
           alignItems="center">
           <Text color="black">VS</Text>
         </Stack>
-      </MotionStack> 
-      
+      </MotionStack>
+
       :
 
-      <MotionStack
-        initial={playAnimation && { scale: 1 } }
-        animate={playAnimation && { scale: 0 } }
-        transition={{
-          duration: 1,
-        }}
-        width="100%"
-        height="100%"
-        bg="rgba(0, 0, 0, 0.671)"
-        _before={{
-          content: "''",
-          position: "absolute",
-          top: "0",
-          bottom: "0",
-          left: "0",
-          right: "0",
-          backgroundColor: "rgba(0, 0, 0, 0.671)"
-        }}>
-        <TwoOptions firstVideo={firstVideo} lastVideo={lastVideo} checkStatus={checkStatus} score={score} bestScore={bestScore} buttonDisabled={true} />
+      playWinAnimation ?
+        <Stack
+          width="100%"
+          height="100%"
+          bg="rgba(0, 0, 0, 0.671)"
+          _before={{
+            content: "''",
+            position: "absolute",
+            top: "0",
+            bottom: "0",
+            left: "0",
+            right: "0",
+            backgroundColor: "rgba(0, 0, 0, 0.671)"
+          }}>
+          <TwoOptions firstVideo={firstVideo} lastVideo={lastVideo} checkStatus={checkStatus} score={score} bestScore={bestScore} buttonDisabled={true} animateScore={false} />
+          <MotionStack
+            animate={{ backgroundColor: ["#FFFFFF", "#D2FFB7", '#AAFF76'] }}
+            transition={{
+              duration: 0.5,
+            }}
+            userSelect="none"
+            borderRadius="999px"
+            position="absolute"
+            top="40%"
+            alignSelf="center"
+            width="max(4vw,40px)"
+            height="max(4vw,40px)"
+            justifyContent="center"
+            alignItems="center">
+            <Icon as={BsCheckLg} />
+          </MotionStack>
+        </Stack>
+
+        :
+
         <MotionStack
-          initial={{ scale: 0 }}
-          animate={{ backgroundColor: ["#FFFFFF", "#FFB3B3", '#FF6A6A'], scale: 1 }}
+          initial={playFirstAnimation && { scale: 1 }}
+          animate={playFirstAnimation && { scale: 0 }}
           transition={{
-            duration: 1,
+            duration: 0.5,
           }}
-          userSelect="none"
-          borderRadius="999px"
-          position="absolute"
-          top="40%"
-          alignSelf="center"
-          width="max(4vw,40px)"
-          height="max(4vw,40px)"
-          justifyContent="center"
-          alignItems="center">
-          <Text color="white">X</Text>
+          width="100%"
+          height="100%"
+          bg="rgba(0, 0, 0, 0.671)"
+          _before={{
+            content: "''",
+            position: "absolute",
+            top: "0",
+            bottom: "0",
+            left: "0",
+            right: "0",
+            backgroundColor: "rgba(0, 0, 0, 0.671)"
+          }}>
+          <TwoOptions firstVideo={firstVideo} lastVideo={lastVideo} checkStatus={checkStatus} score={score} bestScore={bestScore} buttonDisabled={true} animateScore={false} />
+          <MotionStack
+            animate={{ backgroundColor: ["#FFFFFF", "#FFB3B3", '#FF6A6A']}}
+            transition={{
+              duration: 1,
+            }}
+            userSelect="none"
+            borderRadius="999px"
+            position="absolute"
+            top="40%"
+            alignSelf="center"
+            width="max(4vw,40px)"
+            height="max(4vw,40px)"
+            justifyContent="center"
+            alignItems="center">
+            <MotionText
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{
+                duration: 0.5,
+              }}
+              color="white">X</MotionText>
+          </MotionStack>
+          {
+            redirectAfterAnimation()
+          }
         </MotionStack>
-        {
-          redirectAfterAnimation()
-        }
-      </MotionStack>
   )
 }
 
