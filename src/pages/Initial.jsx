@@ -1,11 +1,25 @@
+import { useState } from "react";
 import { Button, Stack, Image, Text } from "@chakra-ui/react"
 import logoWhite from "../assets/logoWhite.png"
+import { motion } from 'framer-motion'
 
-function Initial({setPages}) {
+const MotionStack = motion(Stack)
+
+function Initial({ setPages }) {
+
+  const [playAnimation, setplayAnimation] = useState(false)
 
   return (
     <>
-      <Stack alignItems="center" justifyContent="center" height="100%">
+      <MotionStack
+        initial={playAnimation ? { scale: 1 } : { scale: 0 }}
+        animate={playAnimation ? { scale: 0 } : { scale: 1 }}
+        transition={{
+          duration: 0.5,
+        }}
+        alignItems="center"
+        justifyContent="center"
+        height="100%">
         <Image src={logoWhite} position="absolute" top="5vw" width="max(30vw,300px)" height="max(15vw,200px)" />
         <Button
           variant="unstyled"
@@ -25,10 +39,14 @@ function Initial({setPages}) {
             cursor: "pointer"
           }}
           _active={{ transform: "scale(97%)" }}
-          onClick={() => { setPages(1) }}>
+          onClick={() => {
+            setplayAnimation(true), setTimeout(function () {
+              setPages(1)
+            }, 500);
+          }}>
           PLAY
         </Button>
-      </Stack>
+      </MotionStack>
     </>
   )
 

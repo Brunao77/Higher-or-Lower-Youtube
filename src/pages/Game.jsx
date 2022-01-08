@@ -13,7 +13,7 @@ function Game({ score, videos, setScore, bestScore, setPages }) {
 
   const [played, setPlayed] = useState(null)
   const [lose, setLose] = useState(false)
-  const [win, setWin] = useState(false)
+  const [playAnimation, setplayAnimation] = useState(false)
 
   useEffect(() => {
     setPlayed(get2RandomItems(videos))
@@ -47,7 +47,9 @@ function Game({ score, videos, setScore, bestScore, setPages }) {
   setScore(played.length - 2)
 
   function redirectAfterAnimation() {
-
+    setTimeout(function () {
+      setplayAnimation(true)
+    }, 1000);
     setTimeout(function () {
       setPages(2)
     }, 2000);
@@ -55,7 +57,12 @@ function Game({ score, videos, setScore, bestScore, setPages }) {
 
   return (
     !(lose || played.length === 50) ?
-      <Stack
+      <MotionStack
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{
+          duration: 0.5,
+        }}
         width="100%"
         height="100%"
         bg="rgba(0, 0, 0, 0.671)"
@@ -82,11 +89,16 @@ function Game({ score, videos, setScore, bestScore, setPages }) {
           alignItems="center">
           <Text color="black">VS</Text>
         </Stack>
-      </Stack> 
+      </MotionStack> 
       
       :
 
-      <Stack
+      <MotionStack
+        initial={playAnimation && { scale: 1 } }
+        animate={playAnimation && { scale: 0 } }
+        transition={{
+          duration: 1,
+        }}
         width="100%"
         height="100%"
         bg="rgba(0, 0, 0, 0.671)"
@@ -120,7 +132,7 @@ function Game({ score, videos, setScore, bestScore, setPages }) {
         {
           redirectAfterAnimation()
         }
-      </Stack>
+      </MotionStack>
   )
 }
 

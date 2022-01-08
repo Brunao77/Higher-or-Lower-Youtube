@@ -1,8 +1,14 @@
+import { useState } from "react";
 import { Button, Stack, Text, Image } from "@chakra-ui/react"
-import React, {useEffect} from "react"
+import React, { useEffect } from "react"
 import logoWhite from "../assets/logoWhite.png"
+import { motion } from 'framer-motion'
+
+const MotionStack = motion(Stack)
 
 function Lose({ score, bestScore, setBestScore, setPages }) {
+
+  const [playAnimation, setplayAnimation] = useState(false)
 
   if (score > bestScore) {
     setBestScore(score)
@@ -13,8 +19,16 @@ function Lose({ score, bestScore, setBestScore, setPages }) {
 
   return (
     <>
-      <Stack height="100%" alignItems="center" justifyContent="center">
-      <Image src={logoWhite} position="absolute" top="5vw" width="max(25vw,300px)" height="max(10vw,200px)" />
+      <MotionStack
+        initial={playAnimation ? { scale: 1 } : { scale: 0 }}
+        animate={playAnimation ? { scale: 0 } : { scale: 1 }}
+        transition={{
+          duration: 0.5,
+        }}
+        height="100%"
+        alignItems="center"
+        justifyContent="center">
+        <Image src={logoWhite} position="absolute" top="5vw" width="max(25vw,300px)" height="max(10vw,200px)" />
         <Text fontSize="max(2vw,10px)" lineHeight="0">You scored:</Text>
         <Text fontSize="max(4vw,30px)" fontWeight="800" color="rgb(252, 255, 95)">{score}</Text>
         <Stack direction="row" spacing="2vw">
@@ -36,7 +50,9 @@ function Lose({ score, bestScore, setBestScore, setPages }) {
               cursor: "pointer"
             }}
             _active={{ transform: "scale(97%)" }}
-            onClick={() => { setPages(1) }}>
+            onClick={() => { setplayAnimation(true), setTimeout(function () {
+              setPages(1)
+            }, 500); }}>
             PLAY AGAIN
           </Button>
           <Button
@@ -57,11 +73,13 @@ function Lose({ score, bestScore, setBestScore, setPages }) {
               cursor: "pointer"
             }}
             _active={{ transform: "scale(97%)" }}
-            onClick={() => { setPages(0)}}>
+            onClick={() => { setplayAnimation(true), setTimeout(function () {
+              setPages(0)
+            }, 500); }}>
             RETURN
           </Button>
         </Stack>
-      </Stack>
+      </MotionStack>
     </>
   )
 
