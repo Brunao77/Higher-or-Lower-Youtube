@@ -5,7 +5,6 @@ import Lose from "./pages/Lose"
 import { useVideos } from './hooks/useVideos'
 
 function App() {
-
   const [score, setScore] = useState(0)
   const [bestScore,setBestScore] = useState(0)
   const [pages,setPages] = useState(0)
